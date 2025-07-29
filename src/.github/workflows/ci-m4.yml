@@ -1,0 +1,50 @@
+name: CI - M4 final Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+
+    services:
+      app:
+        image: m4-final-test:latest
+        ports:
+          - 3000:3000
+        options: >-
+          --health-cmd="curl --fail http://localhost:3000/api/ping || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Build with Maven
+        run: mvn clean package
+
+      - name: Run unit tests
+        run: mvn test
+
+      - name: Build Docker image
+        run: docker build -t m4-final-test .
+
+      - name: Run JMeter tests
+        run: mvn verify
+
+      - name: Archive JMeter results
+        uses: actions/upload-artifact@v4
+        with:
+          name: jmeter-results
+          path: target/jmeter/results/
