@@ -7,6 +7,15 @@ on:
     branches: [ main ]
 
 jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
   build-test:
     runs-on: ubuntu-latest
 
