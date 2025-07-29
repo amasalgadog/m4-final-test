@@ -10,17 +10,6 @@ jobs:
   build-test:
     runs-on: ubuntu-latest
 
-    services:
-      app:
-        image: m4-final-test:latest
-        ports:
-          - 3000:3000
-        options: >-
-          --health-cmd="curl --fail http://localhost:3000/api/ping || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
