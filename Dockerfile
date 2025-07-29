@@ -1,4 +1,3 @@
-# Using OpenJDK 17 as the base image
 # This Dockerfile is designed to build a Java application using Maven and run it in a container
 FROM openjdk:21-jdk-slim
 
